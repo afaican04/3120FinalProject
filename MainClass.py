@@ -47,4 +47,3 @@ class PolygonData:
         result = pd.read_sql_query(query, conn)
         conn.close()
         return result
-

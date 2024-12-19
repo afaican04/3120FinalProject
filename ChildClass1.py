@@ -1,16 +1,22 @@
-from MainClass import PolygonData  
+from MainClass import PolygonData
 
-ticker = "AAPL"
-start_date = "2024-12-10" 
-end_date = "2024-12-16"    
-multiplier = 1
-timespan = "day"
+class ChildPolygonData(PolygonData):
+    def __init__(self):
+        super().__init__()
 
-polygon_data = PolygonData()
+    def print_data_head(self, ticker, multiplier, timespan, start_date, end_date):
+        stock_data = self.get_data(ticker, multiplier, timespan, start_date, end_date)
 
-stock_data = polygon_data.get_data(ticker, multiplier, timespan, start_date, end_date)
+        if stock_data.empty:
+            print("No data retrieved.")
+        else:
+            print(stock_data.head())
+polygon_data = ChildPolygonData()
 
-if not stock_data.empty:
-    print(stock_data.head())
-else:
-    print("No data retrieved.")
+polygon_data.print_data_head(
+    ticker="AAPL", 
+    multiplier=1,
+    timespan="day",
+    start_date="2024-01-01", 
+    end_date="2024-01-10"    
+)
