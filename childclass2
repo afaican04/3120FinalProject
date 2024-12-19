@@ -1,0 +1,75 @@
+from MainClass import PolygonData
+import matplotlib.pyplot as plt
+
+class ExtendedPolygonData(PolygonData):
+    def plot_volume_trend(self, df):
+        """Plot the trend of trading volume over time."""
+        if df.empty:
+            print("Data not available to plot volume trend.")
+        else:
+            plt.figure(figsize=(10, 6))
+            plt.plot(df['Date'], df['Volume'], label='Volume', color='orange', marker='o')
+            plt.title(f"Volume Trend for Stock")
+            plt.xlabel("Date")
+            plt.ylabel("Trading Volume")
+            plt.legend()
+            plt.grid()
+            plt.show()
+
+    def calculate_moving_average(self, df, window_size):
+        """Calculate and add a moving average to the DataFrame."""
+        if df.empty:
+            print("Data not available for moving average calculation.")
+        else:
+            column_name = f"SMA_{window_size}"
+            df[column_name] = df['Close'].rolling(window=window_size).mean()
+            print(f"Added {column_name} to the DataFrame.")
+
+    def plot_with_moving_average(self, df, window_size):
+        """Plot closing price and moving average."""
+        if df.empty:
+            print("Data not available to plot moving average.")
+        else:
+            self.calculate_moving_average(df, window_size)
+            plt.figure(figsize=(10, 6))
+            plt.plot(df['Date'], df['Close'], label='Close Price', marker='o')
+            plt.plot(df['Date'], df[f"SMA_{window_size}"], label=f"{window_size}-day SMA", linestyle='--')
+            plt.title(f"Close Price with {window_size}-day Moving Average")
+            plt.xlabel("Date")
+            plt.ylabel("Price")
+            plt.legend()
+            plt.grid()
+            plt.show()
+
+    def filter_high_volume(self, df, threshold):
+        """Filter data for days where trading volume exceeds a threshold."""
+        if df.empty:
+            print("Data not available for filtering.")
+        else:
+            high_volume_df = df[df['Volume'] > threshold]
+            print(f"Filtered data to {len(high_volume_df)} rows with volume greater than {threshold}.")
+            return high_volume_df
+
+# Example usage:
+if __name__ == "__main__":
+    ticker = "AAPL"
+    start_date = "2024-12-10"
+    end_date = "2024-12-16"
+    multiplier = 1
+    timespan = "day"
+
+    extended_data = ExtendedPolygonData()
+    stock_data = extended_data.get_data(ticker, multiplier, timespan, start_date, end_date)
+
+    if not stock_data.empty:
+        # Plot volume trend
+        extended_data.plot_volume_trend(stock_data)
+
+        # Plot close price with 5-day moving average
+        extended_data.plot_with_moving_average(stock_data, window_size=5)
+
+        # Filter data for high volume
+        filtered_data = extended_data.filter_high_volume(stock_data, threshold=100000000)
+        print(filtered_data)
+    else:
+        print("No data retrieved.")
