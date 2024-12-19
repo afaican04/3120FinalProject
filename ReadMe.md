@@ -19,3 +19,5 @@ Key Points
 
 HOW TO USE IT 
 So we first have to create a key.py file that has your API_KEY defined. Then we install our libraries Pandas, SQLite3, Requests, and Matplotlib. Then we pick out the stock that we want to use and set the parameters in it. Then we do this for whichever file you want to use. For example in our chart class you'll have to set the parameters correctly then run it. 
+
+Here is a link explaining our project and how we utlize it with examples. https://youtu.be/Rdbm5rKk9aI
